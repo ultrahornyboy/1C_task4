@@ -28,12 +28,14 @@ def compare_files(dir1, dir2, similarity):
         return
 
     for file1 in dir1_files:
+        # получения пути файла
         path1 = os.path.join(dir1, file1)
         (could_read_file1, file1_content) = read_file(path1)
         if not could_read_file1:
             continue
 
         for file2 in dir2_files:
+            # получаем пути файла
             path2 = os.path.join(dir2, file2)
 
             if path2 in banned_file_paths:
@@ -41,11 +43,14 @@ def compare_files(dir1, dir2, similarity):
 
             (could_read_file2, file2_content) = read_file(path2)
             if not could_read_file2:
+                # кидаем в бан те файлы которые не открылись
                 banned_file_paths.append(path2)
 
             if file1_content == file2_content:
+                # если файлы полностью схожи то мы просто выводим этот факт
                 print(f"{path1} - {path2}")
             else:
+                # порверка на точность сходства
                 similarity_percent = Levenshtein.ratio(
                     file1_content, file2_content) * 100
                 if similarity_percent >= similarity:
